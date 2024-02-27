@@ -28,6 +28,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             PokédexTheme {
                  val navController = rememberNavController()
+
                  NavHost(
                      navController = navController,
                      startDestination = "pokemon_list_screen"

@@ -70,10 +70,14 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     //Navigation
     implementation("androidx.navigation:navigation-compose:2.7.7")
-    //Dagger-Hilt
+    //Dagger-Hilt - di
     implementation("com.google.dagger:hilt-android:2.44")
     implementation("com.google.dagger:hilt-android-compiler:2.44")
-//    kapt {
-//        correctErrorTypes = true
-//    }
+    //Timber - logger
+    implementation ("com.jakewharton.timber:timber:5.0.1")
+    //Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:latest.version")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 }
