@@ -1,7 +1,7 @@
 package com.example.pokdex.data.remote.responses
 
 data class BlackWhite(
-    val animated: com.example.pokdex.data.remote.responses.Animated,
+    val animated: Animated,
     val back_default: String,
     val back_female: Any,
     val back_shiny: String,

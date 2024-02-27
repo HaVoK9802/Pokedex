@@ -2,5 +2,5 @@ package com.example.pokdex.data.remote.responses
 
 data class GameIndice(
     val game_index: Int,
-    val version: com.example.pokdex.data.remote.responses.Version
+    val version: Version
 )
