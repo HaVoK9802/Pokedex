@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavArgument
 import androidx.navigation.NavArgumentBuilder
 import androidx.navigation.NavType
@@ -23,7 +24,9 @@ import com.example.pokdex.data.remote.responses.PokemonList
 import com.example.pokdex.domain.PokemonViewModel
 
 import com.example.pokdex.ui.theme.PokédexTheme
+import com.example.pokdex.ui.views.PokemonListScreen
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import androidx.lifecycle.viewmodel.compose.viewModel as viewModel
 
 
@@ -31,9 +34,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
             PokédexTheme {
-                 APIResults()
+
+
                  val navController = rememberNavController()
+                 val viewModel:PokemonViewModel= viewModel()
 
                  NavHost(
                      navController = navController,
@@ -42,7 +48,7 @@ class MainActivity : ComponentActivity() {
                     composable(
                         route="pokemon_list_screen"
                     ){
-
+                        PokemonListScreen(navController = navController, viewModel = viewModel)
                     }
                     composable(
                         route="pokemon_detail_screen/{dominantColor}/{pokemonName}",
@@ -57,7 +63,6 @@ class MainActivity : ComponentActivity() {
                     ){
                         val dominantColor = remember{it.arguments?.getInt("dominantColor")}
                         val pokemonName = remember{it.arguments?.getString("pokemonName")}
-
                     }
                  }
             }
@@ -65,18 +70,19 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview
-@Composable
-fun APIResults(){
-     Surface(modifier = Modifier.fillMaxSize()){
-         val viewModel:PokemonViewModel= viewModel()
-         viewModel.getPokemonList()
-         when(viewModel.pokemonListStatus){
-             is RequestStatus.Loading -> Text(text = "loading...")
-             is RequestStatus.Success ->  Text(text = viewModel.resultsCopy[5].name)
-             is RequestStatus.Error -> Text(text = "rtt")
-         }
-
-     }
-}
+//@Preview
+//@Composable
+//fun APIResults(){
+//     Surface(modifier = Modifier.fillMaxSize()){
+//         val viewModel:PokemonViewModel= viewModel()
+//         viewModel.getPokemonList()
+//
+//         when(viewModel.pokemonListStatus){
+//             is RequestStatus.Loading -> Text(text = "loading...")
+//             is RequestStatus.Success ->  Text(text = viewModel.resultsCopy[5].name)
+//             is RequestStatus.Error -> Text(text = "rtt")
+//         }
+//
+//     }
+//}
 
