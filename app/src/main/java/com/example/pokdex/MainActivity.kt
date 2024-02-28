@@ -18,15 +18,21 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.pokdex.data.remote.RequestStatus
+import com.example.pokdex.data.remote.responses.PokemonList
+import com.example.pokdex.domain.PokemonViewModel
+
 import com.example.pokdex.ui.theme.PokédexTheme
 import dagger.hilt.android.AndroidEntryPoint
+import androidx.lifecycle.viewmodel.compose.viewModel as viewModel
 
-@AndroidEntryPoint
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             PokédexTheme {
+                 APIResults()
                  val navController = rememberNavController()
 
                  NavHost(
@@ -57,5 +63,20 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun APIResults(){
+     Surface(modifier = Modifier.fillMaxSize()){
+         val viewModel:PokemonViewModel= viewModel()
+         viewModel.getPokemonList()
+         when(viewModel.pokemonListStatus){
+             is RequestStatus.Loading -> Text(text = "loading...")
+             is RequestStatus.Success ->  Text(text = viewModel.resultsCopy[5].name)
+             is RequestStatus.Error -> Text(text = "rtt")
+         }
+
+     }
 }
 
