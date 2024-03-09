@@ -3,33 +3,19 @@ package com.example.pokdex
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavArgument
-import androidx.navigation.NavArgumentBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.pokdex.data.remote.RequestStatus
-import com.example.pokdex.data.remote.responses.PokemonList
 import com.example.pokdex.domain.PokemonDetailViewModel
 import com.example.pokdex.domain.PokemonViewModel
 
 import com.example.pokdex.ui.theme.PokédexTheme
 import com.example.pokdex.ui.views.PokemonDetailScreen
 import com.example.pokdex.ui.views.PokemonListScreen
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import androidx.lifecycle.viewmodel.compose.viewModel as viewModel
 
 

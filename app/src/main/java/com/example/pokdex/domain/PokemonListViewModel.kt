@@ -5,23 +5,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateList
-import androidx.compose.ui.text.toLowerCase
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokdex.data.remote.LIMIT
 import com.example.pokdex.data.remote.OFFSET
 
 import com.example.pokdex.data.remote.PokemonApi
-import com.example.pokdex.data.remote.PokemonCardDetails
 import com.example.pokdex.data.remote.RequestStatus
-import com.example.pokdex.data.remote.responses.Pokemon
-import com.example.pokdex.data.remote.responses.PokemonList
-import com.example.pokdex.data.remote.responses.Result
+import com.example.pokdex.data.remote.models.PokemonList
+import com.example.pokdex.data.remote.models.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.openjdk.tools.javac.jvm.Items
 import java.io.IOException
 
 @SuppressLint("MutableCollectionMutableState")

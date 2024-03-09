@@ -1,7 +1,7 @@
 package com.example.pokdex.data.remote
 
-import com.example.pokdex.data.remote.responses.Pokemon
-import com.example.pokdex.data.remote.responses.PokemonList
+import com.example.pokdex.data.remote.models.Pokemon
+import com.example.pokdex.data.remote.models.PokemonList
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET

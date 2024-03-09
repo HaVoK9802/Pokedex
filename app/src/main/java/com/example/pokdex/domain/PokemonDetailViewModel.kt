@@ -1,20 +1,15 @@
 package com.example.pokdex.domain
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pokdex.data.remote.PokeApi
 import com.example.pokdex.data.remote.PokemonApi
 import com.example.pokdex.data.remote.RequestStatus
-import com.example.pokdex.data.remote.responses.Pokemon
-import com.example.pokdex.data.remote.responses.Stat
-import com.example.pokdex.data.remote.responses.StatX
-import com.example.pokdex.data.remote.responses.Type
-import com.google.common.math.Stats
+import com.example.pokdex.data.remote.models.Pokemon
+import com.example.pokdex.data.remote.models.Stat
+import com.example.pokdex.data.remote.models.Type
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

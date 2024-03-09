@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Column
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,12 +31,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -46,11 +42,9 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.example.pokdex.R
-import com.example.pokdex.data.remote.IMAGE_BASE_URL
 import com.example.pokdex.data.remote.RequestStatus
-import com.example.pokdex.data.remote.responses.Pokemon
+import com.example.pokdex.data.remote.models.Pokemon
 import com.example.pokdex.domain.PokemonDetailViewModel
-import com.example.pokdex.domain.PokemonViewModel
 import com.example.pokdex.ui.theme.AtkColor
 import com.example.pokdex.ui.theme.DefColor
 import com.example.pokdex.ui.theme.HPColor
@@ -75,7 +69,6 @@ import com.example.pokdex.ui.theme.psychic
 import com.example.pokdex.ui.theme.rock
 import com.example.pokdex.ui.theme.steel
 import com.example.pokdex.ui.theme.water
-import java.nio.file.WatchEvent
 import kotlin.math.round
 
 @Composable
@@ -142,7 +135,7 @@ fun TopBar( navController: NavController, pokemonDetailViewModel: PokemonDetailV
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(110.dp)
-        .background(color = Color(0xfffe0065))
+        .background(Color(0xffd30a40))
 
         , contentAlignment = Alignment.Center) {
         Box(
@@ -170,9 +163,9 @@ fun TopBar( navController: NavController, pokemonDetailViewModel: PokemonDetailV
         {
             DecorationBalls(ballColor = Color.Red)
             Spacer(modifier = Modifier.width(5.dp))
-            DecorationBalls(ballColor = Color.Yellow)
+            DecorationBalls(ballColor = SpdColor)
             Spacer(modifier = Modifier.width(5.dp))
-            DecorationBalls(ballColor = Color.Green)
+            DecorationBalls(ballColor = HPColor)
             Spacer(modifier = Modifier.width(10.dp))
             PokemonTypeIndicator(pokemonDetailViewModel = pokemonDetailViewModel)
         }
@@ -412,11 +405,12 @@ fun PokemonDetailContainer(pokemonDetailViewModel: PokemonDetailViewModel){
          modifier = Modifier
              .fillMaxSize()
              .clip(RoundedCornerShape(10.dp))
-
              .border(width = 2.dp, shape = RoundedCornerShape(10.dp), color = Color.Black)
              .border(width = 8.dp, shape = RoundedCornerShape(10.dp), color = Color.White)
              .border(width = 10.dp, shape = RoundedCornerShape(10.dp), color = Color.DarkGray)
              .background(color = Color(0xff99cc99))
+           ,
+           verticalArrangement = Arrangement.SpaceEvenly
        ){
          Row(modifier = Modifier
              .fillMaxWidth()
@@ -475,7 +469,7 @@ fun PokemonDetailContainer(pokemonDetailViewModel: PokemonDetailViewModel){
            }
            Column(modifier = Modifier
                .fillMaxSize()
-               .padding(horizontal = 20.dp, vertical = 5.dp)
+               .padding(horizontal = 20.dp, vertical = 10.dp)
 //               .background(Color.Cyan)
            ){
 
