@@ -20,30 +20,26 @@ import com.example.pokdex.data.remote.responses.PokemonList
 import com.example.pokdex.data.remote.responses.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.openjdk.tools.javac.jvm.Items
 import java.io.IOException
 
 @SuppressLint("MutableCollectionMutableState")
 class PokemonViewModel : ViewModel() {
-    var pokemonListStatus: RequestStatus<PokemonList> by mutableStateOf(RequestStatus.Loading<PokemonList>())
-//            private var results:List<Result> = mutableListOf<Result>().toMutableStateList()
-//            var resultsCopy:MutableList<Result> = mutableListOf<Result>().toMutableStateList()
-    //only addition, deletion and updation within these lists will trigger recomposition
+    var pokemonListStatus: RequestStatus<PokemonList> by mutableStateOf(RequestStatus.Loading())
 
-    private var results: List<Result> by mutableStateOf(listOf())
-    var resultsCopy: MutableList<Result> by mutableStateOf(mutableStateListOf())
-    //I need to track both state change(when i directly assign necessaries from result to resultCopy i.e for startsWith)
-    // And I need to add() some partial matched results without disturbing the result of startsWith.
-    // But add() will not track internal changes in the MutableList(only tracks assignment or instance change)
-    // so to solve this corner case also, mutableStateList() helps. Because it tracks changes to the List in terms of additions,deletions,updates
+    private var results: List<Result> =listOf()
+    var resultsCopy: MutableList<Result> = mutableStateListOf()
 
     var searchQueryValue: String by mutableStateOf("")
 
-    init {
-        getPokemonList();
-    }
 
-    private fun getPokemonList() {
+//    init {
+//        getPokemonList()
+////       not a good practice, only for initializations
+//    }
+
+     fun getPokemonList() {
         viewModelScope.launch(Dispatchers.IO) {
             pokemonListStatus = try {
                 val res = PokemonApi.retrofitService.getPokemonList(
@@ -51,7 +47,17 @@ class PokemonViewModel : ViewModel() {
                 )
                 results = res.results
                 results.map { it.pokeId = calculatePokeId(it.url) }
-                resultsCopy = results.toMutableStateList()
+                withContext(Dispatchers.Main){
+                //accessing UI state should not be done on IO thread.
+                //if you do so, an exception is thrown stating that
+                    //FATAL EXCEPTION: DefaultDispatcher-worker-1
+                    //Process: com.example.pokdex, PID: 27664
+                    //java.lang.IllegalStateException: Reading a state that was created after the snapshot was taken or in a snapshot that has not yet been applied
+                    // in simple words you are trying to access/mutate state (without sync with UI in main thread)
+                    // after the changes have already been decided and ready to compose
+//                resultsCopy = results.toMutableStateList()
+                  resultsCopy.addAll(results)
+                }
                 RequestStatus.Success(res)
             } catch (e: IOException) {
                 RequestStatus.Error("Failed to fetch")
@@ -61,34 +67,36 @@ class PokemonViewModel : ViewModel() {
 
     fun liveSearch(query: String) {
         viewModelScope.launch(Dispatchers.Default) {
+
+            val filterByStartingStringMatch = results.filter { it.name.startsWith(query) }
+            val filterByRelevance = results.filter { query in it.name }
+
+
             if (query == "") {
-//                        resultsCopy.clear()
-//                        for(everyItem in results.toMutableList()){
-//                            resultsCopy.add(everyItem)
-//                        }
-                resultsCopy = results.toMutableStateList()
+
+                resultsCopy.clear()
+                resultsCopy.addAll(results)
+
+
             } else {
-//                        resultsCopy.clear()
-                if (results.filter { it.name.startsWith(query) }
-                        .isNotEmpty()) {
-//                            for (everyItem in results.toMutableList()
-//                                .filter { it.name.startsWith(query)}) {
-//                                resultsCopy.add(everyItem)
-//                            }
-                    resultsCopy = results.filter { it.name.startsWith(query) }.toMutableStateList()
-                    for (everyItem in results.filter { query in it.name }.sortedBy { it.name }) {
-                        if (!resultsCopy.contains(everyItem)) {
-                            resultsCopy.add(everyItem)
+
+                if (filterByStartingStringMatch.isNotEmpty()) {
+
+                    resultsCopy.clear()
+                    resultsCopy.addAll(filterByStartingStringMatch)
+                    for(pokemon in filterByRelevance.sortedBy { it.name }){
+                        if(!resultsCopy.contains(pokemon)){
+                            resultsCopy.add(pokemon)
                         }
                     }
+
                 } else {
-//                            for (everyItem in results.toMutableList().filter{ query in it.name }) {
-//                                resultsCopy.add(everyItem)
-//                            }
-                    resultsCopy = results.filter { query in it.name }.sortedBy { it.name }
-                        .toMutableStateList()
+
+                    resultsCopy.clear()
+                    resultsCopy.addAll(filterByRelevance.sortedBy { it.name })
+
                 }
-//                        resultsCopy.sortBy{it.name}
+
 
             }
         }
@@ -107,9 +115,6 @@ class PokemonViewModel : ViewModel() {
         return pokeId;
     }
 
-    fun getPokemonCardDetails(name: String, results: List<Result>) {
-
-    }
 
 
 }

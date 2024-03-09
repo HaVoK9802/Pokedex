@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,9 +22,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.pokdex.data.remote.RequestStatus
 import com.example.pokdex.data.remote.responses.PokemonList
+import com.example.pokdex.domain.PokemonDetailViewModel
 import com.example.pokdex.domain.PokemonViewModel
 
 import com.example.pokdex.ui.theme.PokédexTheme
+import com.example.pokdex.ui.views.PokemonDetailScreen
 import com.example.pokdex.ui.views.PokemonListScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -37,10 +40,15 @@ class MainActivity : ComponentActivity() {
 
             PokédexTheme {
 
-
                  val navController = rememberNavController()
-                 val viewModel:PokemonViewModel= viewModel()
-
+                 val PokemonListViewModel:PokemonViewModel= viewModel()
+                 LaunchedEffect(Unit){
+                     PokemonListViewModel.getPokemonList()
+                 // for side-effects, takes in state dependencies. If provided with static value like Unit, it will run only on initial composition.
+                 }
+//                 LaunchedEffect(viewModel.searchQueryValue){
+//                     viewModel.liveSearch(viewModel.searchQueryValue)
+//                 }
                  NavHost(
                      navController = navController,
                      startDestination = "pokemon_list_screen"
@@ -48,21 +56,24 @@ class MainActivity : ComponentActivity() {
                     composable(
                         route="pokemon_list_screen"
                     ){
-                        PokemonListScreen(navController = navController, viewModel = viewModel)
+                        PokemonListScreen(navController = navController, viewModel = PokemonListViewModel)
                     }
                     composable(
-                        route="pokemon_detail_screen/{dominantColor}/{pokemonName}",
+                        route="pokemon_detail_screen/{pokemonName}",
                         arguments = listOf(
-                            navArgument(name = "dominantColor"){
-                                type = NavType.IntType
-                            },
                             navArgument(name = "pokemonName"){
                                 type = NavType.StringType
                             }
                         )
                     ){
-                        val dominantColor = remember{it.arguments?.getInt("dominantColor")}
-                        val pokemonName = remember{it.arguments?.getString("pokemonName")}
+                        val pokemonName:String? = remember{it.arguments?.getString("pokemonName")}
+
+                        val pokemonDetailViewModel:PokemonDetailViewModel = viewModel();
+
+                        LaunchedEffect(Unit){
+                            pokemonDetailViewModel.fetchPokemonStats(name = pokemonName!!)
+                        }
+                        PokemonDetailScreen(navController = navController,pokemonDetailViewModel = pokemonDetailViewModel )
                     }
                  }
             }

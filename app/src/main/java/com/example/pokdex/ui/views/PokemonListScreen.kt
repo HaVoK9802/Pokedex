@@ -86,7 +86,7 @@ import org.openjdk.tools.javac.util.RichDiagnosticFormatter
 @Composable
 fun PokemonListScreen(navController: NavController, viewModel: PokemonViewModel) {
 
-    Column(
+   Box(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
@@ -107,15 +107,18 @@ fun PokemonListScreen(navController: NavController, viewModel: PokemonViewModel)
 
             SearchBar(viewModel = viewModel)
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(30.dp))
         }
 
-        Pokeball()
-
-        Column(modifier = Modifier.fillMaxWidth()) {
+       Box(modifier = Modifier
+           .fillMaxWidth()
+           .offset(0.dp, 210.dp)) {
 
             when (viewModel.pokemonListStatus) {
-                is RequestStatus.Loading -> CircularProgressIndicator(modifier = Modifier.fillMaxSize().padding(100.dp).align(Alignment.CenterHorizontally))
+                is RequestStatus.Loading -> CircularProgressIndicator(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(100.dp)
+                    .align(Alignment.Center))
                 is RequestStatus.Success -> {}
                 is RequestStatus.Error -> Text(text = "Failed to fetch")
             }
@@ -131,7 +134,7 @@ fun PokemonListScreen(navController: NavController, viewModel: PokemonViewModel)
                     Box(modifier = Modifier
                         .padding(10.dp)
                         .shadow(10.dp, shape = RoundedCornerShape(10.dp), spotColor = Color.Black)
-                        .offset(0.dp,1.dp)
+                        .offset(0.dp, 1.dp)
                     )
                     {
                         PokeCard(navController = navController, name = load.name , pokeId = load.pokeId)
@@ -141,6 +144,7 @@ fun PokemonListScreen(navController: NavController, viewModel: PokemonViewModel)
 
             }
         }
+        Pokeball()
     }
 }
 
@@ -159,21 +163,17 @@ fun Pokeball() {
         modifier = Modifier
             .fillMaxWidth()
             .height(51.dp)
-            .shadow(
-                elevation = 10.dp,
-                ambientColor = Color.White,
-                spotColor = Color.White
-            ), contentAlignment = Alignment.Center
+            .background(Color.Transparent).offset(0.dp,180.dp), contentAlignment = Alignment.Center
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(20.dp)
-                .background(Color.Red)
-                .align(Alignment.TopCenter)
-        ) {
-
-        }
+//        Column(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .height(20.dp)
+//                .background(Color.Red)
+//                .align(Alignment.TopCenter)
+//        ) {
+//
+//        }
         Spacer(
             modifier = Modifier
                 .height(12.dp)
@@ -281,7 +281,7 @@ fun PokeCard(navController: NavController,name:String,pokeId:Int){
 //                brush = Brush.verticalGradient(listOf(Color(43,109,181),Color(43,109,181),)),
 //                shape = RoundedCornerShape(10.dp)
 //            )
-            .clickable { }
+            .clickable { navController.navigate("pokemon_detail_screen/${name}") }
 
         , contentAlignment = Alignment.Center
     ){
@@ -296,7 +296,9 @@ fun PokeCard(navController: NavController,name:String,pokeId:Int){
                 CircularProgressIndicator(modifier = Modifier.padding(60.dp))
             }
             else {
-                SubcomposeAsyncImageContent(modifier = Modifier.padding(5.dp).padding(bottom = 30.dp))
+                SubcomposeAsyncImageContent(modifier = Modifier
+                    .padding(5.dp)
+                    .padding(bottom = 30.dp))
             }
         }
 
