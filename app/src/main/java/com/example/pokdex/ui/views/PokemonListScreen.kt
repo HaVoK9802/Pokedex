@@ -108,7 +108,7 @@ fun PokemonListScreen(navController: NavController, viewModel: PokemonViewModel)
                         .offset(0.dp, 1.dp)
                     )
                     {
-                        PokeCard(navController = navController, name = load.name , pokeId = load.pokeId)
+                        PokeCard(viewModel = viewModel,navController = navController, name = load.name , pokeId = load.pokeId)
                     }
 //                    PokeCard(navController = navController, name = load.name , pokeId = load.pokeId)
                 }
@@ -134,7 +134,8 @@ fun Pokeball() {
         modifier = Modifier
             .fillMaxWidth()
             .height(51.dp)
-            .background(Color.Transparent).offset(0.dp,180.dp), contentAlignment = Alignment.Center
+            .background(Color.Transparent)
+            .offset(0.dp, 180.dp), contentAlignment = Alignment.Center
     ) {
 //        Column(
 //            modifier = Modifier
@@ -233,13 +234,9 @@ fun SearchBarPreview() {
     SearchBar(viewModel = viewModel())
 }
 
-@Composable
-fun ListOfPokemon() {
-
-}
 
 @Composable
-fun PokeCard(navController: NavController,name:String,pokeId:Int){
+fun PokeCard(viewModel: PokemonViewModel,navController: NavController,name:String,pokeId:Int){
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(10.dp))
@@ -252,7 +249,14 @@ fun PokeCard(navController: NavController,name:String,pokeId:Int){
 //                brush = Brush.verticalGradient(listOf(Color(43,109,181),Color(43,109,181),)),
 //                shape = RoundedCornerShape(10.dp)
 //            )
-            .clickable { navController.navigate("pokemon_detail_screen/${name}") }
+            .clickable {
+
+                if(!viewModel.cardTapped) {
+                    viewModel.cardTapped=true;
+                    viewModel.revertCardTapped()
+                    navController.navigate("pokemon_detail_screen/${name}")
+                }
+                       }
 
         , contentAlignment = Alignment.Center
     ){
@@ -286,7 +290,7 @@ fun PokeCard(navController: NavController,name:String,pokeId:Int){
 @Preview
 @Composable
 fun PokeCardPreview(){
-    PokeCard(navController = rememberNavController(), name = "Pokemon", pokeId = 2)
+    PokeCard(viewModel = PokemonViewModel(),navController = rememberNavController(), name = "Pokemon", pokeId = 2)
 }
 
 

@@ -32,9 +32,7 @@ class MainActivity : ComponentActivity() {
                      PokemonListViewModel.getPokemonList()
                  // for side-effects, takes in state dependencies. If provided with static value like Unit, it will run only on initial composition.
                  }
-//                 LaunchedEffect(viewModel.searchQueryValue){
-//                     viewModel.liveSearch(viewModel.searchQueryValue)
-//                 }
+
                  NavHost(
                      navController = navController,
                      startDestination = "pokemon_list_screen"

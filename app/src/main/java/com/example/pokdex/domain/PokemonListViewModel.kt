@@ -15,6 +15,7 @@ import com.example.pokdex.data.remote.RequestStatus
 import com.example.pokdex.data.remote.models.PokemonList
 import com.example.pokdex.data.remote.models.Result
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
@@ -27,6 +28,9 @@ class PokemonViewModel : ViewModel() {
     var resultsCopy: MutableList<Result> = mutableStateListOf()
 
     var searchQueryValue: String by mutableStateOf("")
+
+    var cardTapped = false;
+
 
 
 //    init {
@@ -108,6 +112,13 @@ class PokemonViewModel : ViewModel() {
             idx++;
         }
         return pokeId;
+    }
+
+    fun revertCardTapped(){
+        viewModelScope.launch(Dispatchers.Main){
+            delay(500)
+            cardTapped = false
+        }
     }
 
 
