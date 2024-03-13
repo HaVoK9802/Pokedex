@@ -583,7 +583,7 @@ fun statToShortStatMapping(stat: String):String{
 @Preview
 @Composable
 fun PokedexImageContainerPreview(){
-    PokedexImageContainer(pokemonDetailViewModel = PokemonDetailViewModel())
+//    PokedexImageContainer(pokemonDetailViewModel = PokemonDetailViewModel())
 }
 
 @Preview
@@ -601,12 +601,12 @@ fun NavIconPreview(){
 @Preview
 @Composable
 fun TopBarPreview(){
-    TopBar( navController = rememberNavController(), pokemonDetailViewModel = PokemonDetailViewModel())
+//    TopBar( navController = rememberNavController(), pokemonDetailViewModel = PokemonDetailViewModel())
 }
 
 
 @Preview
 @Composable
 fun PokemonDetailScreenPreview(){
-    PokemonDetailScreen( navController = rememberNavController(),pokemonDetailViewModel = PokemonDetailViewModel())
+//    PokemonDetailScreen( navController = rememberNavController(),pokemonDetailViewModel = PokemonDetailViewModel())
 }

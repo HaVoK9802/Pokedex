@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,9 +17,11 @@ import com.example.pokdex.domain.PokemonViewModel
 import com.example.pokdex.ui.theme.PokédexTheme
 import com.example.pokdex.ui.views.PokemonDetailScreen
 import com.example.pokdex.ui.views.PokemonListScreen
+import dagger.hilt.android.AndroidEntryPoint
 import androidx.lifecycle.viewmodel.compose.viewModel as viewModel
 
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,9 +30,9 @@ class MainActivity : ComponentActivity() {
             PokédexTheme {
 
                  val navController = rememberNavController()
-                 val PokemonListViewModel:PokemonViewModel= viewModel()
+                 val pokemonListViewModel:PokemonViewModel= hiltViewModel()
                  LaunchedEffect(Unit){
-                     PokemonListViewModel.getPokemonList()
+                     pokemonListViewModel.getPokemonList()
                  // for side-effects, takes in state dependencies. If provided with static value like Unit, it will run only on initial composition.
                  }
 
@@ -40,7 +43,7 @@ class MainActivity : ComponentActivity() {
                     composable(
                         route="pokemon_list_screen"
                     ){
-                        PokemonListScreen(navController = navController, viewModel = PokemonListViewModel)
+                        PokemonListScreen(navController = navController, viewModel = pokemonListViewModel)
                     }
                     composable(
                         route="pokemon_detail_screen/{pokemonName}",
@@ -52,10 +55,10 @@ class MainActivity : ComponentActivity() {
                     ){
                         val pokemonName:String? = remember{it.arguments?.getString("pokemonName")}
 
-                        val pokemonDetailViewModel:PokemonDetailViewModel = viewModel();
+                        val pokemonDetailViewModel:PokemonDetailViewModel = hiltViewModel()
 
                         LaunchedEffect(Unit){
-                            pokemonDetailViewModel.fetchPokemonStats(name = pokemonName!!)
+                            pokemonDetailViewModel.fetchPokemonStats(name = pokemonName?:"")
                         }
                         PokemonDetailScreen(navController = navController,pokemonDetailViewModel = pokemonDetailViewModel )
                     }

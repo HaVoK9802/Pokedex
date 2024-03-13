@@ -5,18 +5,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pokdex.data.remote.PokemonApi
+import com.example.pokdex.data.remote.PokeApi
 import com.example.pokdex.data.remote.RequestStatus
 import com.example.pokdex.data.remote.models.Pokemon
 import com.example.pokdex.data.remote.models.Stat
 import com.example.pokdex.data.remote.models.Type
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
+import javax.inject.Inject
 
 
-class PokemonDetailViewModel:ViewModel(){
+@HiltViewModel
+class PokemonDetailViewModel @Inject constructor(val pokemonApiService: PokeApi):ViewModel(){
 
     var pokeDetailStatus:RequestStatus<Pokemon> by mutableStateOf(RequestStatus.Loading())
     var height:Int by mutableStateOf(0)
@@ -34,7 +37,8 @@ class PokemonDetailViewModel:ViewModel(){
 
             viewModelScope.launch(Dispatchers.IO) {
                 pokeDetailStatus = try {
-                    val res = PokemonApi.retrofitService.getPokemonDetails(name)
+
+                    val res = pokemonApiService.getPokemonDetails(name)
                     withContext(Dispatchers.Main){
                         statResult = res.stats
                         types = res.types

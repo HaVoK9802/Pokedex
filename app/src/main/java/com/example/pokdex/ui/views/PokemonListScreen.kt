@@ -123,7 +123,7 @@ fun PokemonListScreen(navController: NavController, viewModel: PokemonViewModel)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PokemonListScreenPreview() {
-    PokemonListScreen(navController = rememberNavController(), viewModel = PokemonViewModel())
+//    PokemonListScreen(navController = rememberNavController(), viewModel = PokemonViewModel())
 }
 
 @Composable
@@ -290,7 +290,7 @@ fun PokeCard(viewModel: PokemonViewModel,navController: NavController,name:Strin
 @Preview
 @Composable
 fun PokeCardPreview(){
-    PokeCard(viewModel = PokemonViewModel(),navController = rememberNavController(), name = "Pokemon", pokeId = 2)
+//    PokeCard(viewModel = PokemonViewModel(),navController = rememberNavController(), name = "Pokemon", pokeId = 2)
 }
 
 

@@ -1,6 +1,6 @@
 package com.example.pokdex.domain
 
-import android.annotation.SuppressLint
+
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -9,19 +9,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokdex.data.remote.LIMIT
 import com.example.pokdex.data.remote.OFFSET
-
-import com.example.pokdex.data.remote.PokemonApi
+import com.example.pokdex.data.remote.PokeApi
 import com.example.pokdex.data.remote.RequestStatus
 import com.example.pokdex.data.remote.models.PokemonList
 import com.example.pokdex.data.remote.models.Result
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
+import javax.inject.Inject
 
-@SuppressLint("MutableCollectionMutableState")
-class PokemonViewModel : ViewModel() {
+
+@HiltViewModel
+class PokemonViewModel @Inject constructor(val pokemonApiService: PokeApi) : ViewModel() {
     var pokemonListStatus: RequestStatus<PokemonList> by mutableStateOf(RequestStatus.Loading())
 
     private var results: List<Result> =listOf()
@@ -41,9 +43,10 @@ class PokemonViewModel : ViewModel() {
      fun getPokemonList() {
         viewModelScope.launch(Dispatchers.IO) {
             pokemonListStatus = try {
-                val res = PokemonApi.retrofitService.getPokemonList(
+                val res = pokemonApiService.getPokemonList(
                     OFFSET, LIMIT
                 )
+
                 results = res.results
                 results.map { it.pokeId = calculatePokeId(it.url) }
                 withContext(Dispatchers.Main){
