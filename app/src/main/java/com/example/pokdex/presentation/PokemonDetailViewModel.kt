@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.pokdex.data.remote.PokeApi
 import com.example.pokdex.utils.RequestStatus
 import com.example.pokdex.data.models.Pokemon
+import com.example.pokdex.data.models.Stat
+import com.example.pokdex.data.models.Type
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,8 +27,8 @@ class PokemonDetailViewModel @Inject constructor(val pokemonApiService: PokeApi)
     //even if it was not state property, directly mutating this property through the vm instance(who's state is tracked)
     //will cause a recomposition. But it is not good practice to do it that way.
     var pokemonName:String by mutableStateOf("")
-    var statResult:List<com.example.pokdex.data.models.Stat> by mutableStateOf(listOf())
-    var types:List<com.example.pokdex.data.models.Type> by mutableStateOf(listOf())
+    var statResult:List<Stat> by mutableStateOf(listOf())
+    var types:List<Type> by mutableStateOf(listOf())
     var imgUrl:String = ""
 
 
