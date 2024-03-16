@@ -33,6 +33,7 @@ class PokemonViewModel @Inject constructor(val pokemonApiService: PokeApi) : Vie
 
     var cardTapped = false;
 
+    var sortingToggle:Boolean by mutableStateOf(true);
 
 
 //    init {
@@ -68,6 +69,7 @@ class PokemonViewModel @Inject constructor(val pokemonApiService: PokeApi) : Vie
     }
 
     fun liveSearch(query: String) {
+        sortingToggle =true
         viewModelScope.launch(Dispatchers.Default) {
 
             val filterByStartingStringMatch = results.filter { it.name.startsWith(query) }
@@ -86,7 +88,7 @@ class PokemonViewModel @Inject constructor(val pokemonApiService: PokeApi) : Vie
 
                     resultsCopy.clear()
                     resultsCopy.addAll(filterByStartingStringMatch)
-                    for(pokemon in filterByRelevance.sortedBy { it.name }){
+                    for(pokemon in filterByRelevance){
                         if(!resultsCopy.contains(pokemon)){
                             resultsCopy.add(pokemon)
                         }
@@ -95,7 +97,7 @@ class PokemonViewModel @Inject constructor(val pokemonApiService: PokeApi) : Vie
                 } else{
 
                     resultsCopy.clear()
-                    resultsCopy.addAll(filterByRelevance.sortedBy { it.name })
+                    resultsCopy.addAll(filterByRelevance)
 
                 }
 
@@ -120,15 +122,73 @@ class PokemonViewModel @Inject constructor(val pokemonApiService: PokeApi) : Vie
 
     fun revertCardTapped(){
         viewModelScope.launch(Dispatchers.Main){
-            delay(700)
+            delay(900)
             cardTapped = false
         }
     }
 
     fun clearSearch(){
+
         searchQueryValue = ""
+        sortingToggle = true
         liveSearch("")
     }
 
+    fun sortingFeature(newVal:Boolean){
+
+
+         viewModelScope.launch(Dispatchers.Default){
+             val filterByStartingStringMatch = results.filter { it.name.startsWith(searchQueryValue) }
+             val filterByRelevance = results.filter { searchQueryValue in it.name }
+
+             if(sortingToggle==true){
+                 if (searchQueryValue == "") {
+                     resultsCopy.clear()
+                     resultsCopy.addAll(results.sortedBy {
+                         it.name
+                     })
+                 } else {
+                     if (filterByStartingStringMatch.isNotEmpty()) {
+                         resultsCopy.clear()
+                         resultsCopy.addAll(filterByStartingStringMatch)
+                         for(pokemon in filterByRelevance){
+                             if(!resultsCopy.contains(pokemon)){
+                                 resultsCopy.add(pokemon)
+                             }
+                         }
+                         resultsCopy.sortBy { it.name }
+                     } else{
+                         resultsCopy.clear()
+                         resultsCopy.addAll(filterByRelevance.sortedBy { it.name })
+                     }
+                 }
+
+             }
+             else if(sortingToggle==false){
+                 if (searchQueryValue == "") {
+                     resultsCopy.clear()
+                     resultsCopy.addAll(results.sortedByDescending { it.name })
+                 } else {
+                     if (filterByStartingStringMatch.isNotEmpty()) {
+                         resultsCopy.clear()
+                         resultsCopy.addAll(filterByStartingStringMatch)
+                         for(pokemon in filterByRelevance){
+                             if(!resultsCopy.contains(pokemon)){
+                                 resultsCopy.add(pokemon)
+                             }
+                         }
+                         resultsCopy.sortedByDescending { it.name }
+                     } else{
+                         resultsCopy.clear()
+                         resultsCopy.addAll(filterByRelevance.sortedByDescending { it.name })
+                     }
+                 }
+             }
+             withContext(Dispatchers.Main){
+             sortingToggle=newVal
+             }
+
+         }
+    }
 
 }

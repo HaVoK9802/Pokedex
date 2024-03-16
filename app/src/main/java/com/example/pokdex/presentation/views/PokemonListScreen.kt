@@ -2,11 +2,13 @@ package com.example.pokdex.presentation.views
 
 
 
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 
 //import androidx.compose.foundation.layout.ColumnScopeInstance.align
 
@@ -29,6 +31,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -38,6 +41,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
@@ -77,8 +82,23 @@ fun PokemonListScreen(navController: NavController, viewModel: PokemonViewModel)
             )
             Spacer(modifier = Modifier.height(20.dp))
 
+            Row(modifier = Modifier
+//                .padding(horizontal = 5.dp),
+                ,
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                SearchBar(viewModel = viewModel)
+//                IconButton(onClick = {},
+//                    modifier = Modifier
+//                        .clip(RoundedCornerShape(8.dp))
+//                        .background(Color.Black)
+//                        .padding(3.5.dp)
+//                ) {
+//                   Icon(painter = painterResource(id = R.drawable.sort_alphabetical_ascending_variant),
+//                       contentDescription ="ascending", tint = Color.White )
+//                }
+            }
 
-            SearchBar(viewModel = viewModel)
 
             Spacer(modifier = Modifier.height(30.dp))
         }
@@ -198,26 +218,46 @@ fun SearchBar(viewModel: PokemonViewModel) {
                 viewModel.liveSearch(it)
             },
             modifier = Modifier
-                .padding(horizontal = 20.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+//            .padding(end = 20.dp),
             maxLines = 1,
             singleLine = true,
-            placeholder = { Text(text = "Enter Pokemon...")},
+            placeholder = { Text(text = "Enter Pokemon...") },
             shape = RoundedCornerShape(8.dp),
-            leadingIcon ={
-                Icon(imageVector = Icons.Default.Search, contentDescription ="Search icon" )
-            }
-            ,
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "Search icon",
+                    modifier = Modifier.clickable {  })
+            },
             trailingIcon = {
-                Icon(imageVector = Icons.Default.Close,contentDescription = "clear search", modifier = Modifier.clickable { viewModel.clearSearch()  })
-            }
-            ,
-            colors = TextFieldDefaults.
-            colors(unfocusedContainerColor = Color.Black,
+                Icon(imageVector = Icons.Default.Close, tint = Color.White,
+                    contentDescription = "clear search", modifier = Modifier.padding(end = 40.dp).clickable { viewModel.clearSearch() })
+                IconButton(onClick = { viewModel.sortingFeature(!viewModel.sortingToggle) }, modifier = Modifier.padding(start = 35.dp)) {
+                    if(viewModel.sortingToggle==true) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.sort_alphabetical_ascending),
+                            contentDescription = "ascending", tint = Color.White,
+                            modifier = Modifier.fillMaxSize().padding(2.dp)
+                        )
+                    }
+                    else if(viewModel.sortingToggle==false){
+                        Icon(
+                            painter = painterResource(id = R.drawable.sort_alphabetical_descending),
+                            contentDescription = "descending", tint = Color.White,
+                            modifier = Modifier.fillMaxSize().padding(2.dp)
+                        )
+                    }
+                }
+            },
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = Color.Black,
                 focusedContainerColor = Color.Black,
                 unfocusedTextColor = Color.LightGray,
-                focusedTextColor = Color.LightGray),
-            )
+                focusedTextColor = Color.LightGray
+            ),
+        )
 
 
 
