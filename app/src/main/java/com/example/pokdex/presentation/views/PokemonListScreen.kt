@@ -122,9 +122,12 @@ fun PokemonListScreen(navController: NavController, viewModel: PokemonViewModel)
             LazyVerticalGrid(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .fillMaxHeight()
                     .padding(horizontal = 10.dp)
                     .padding(top = 210.dp)
-                    .background(Color.White),
+                    .background(Color.White)
+
+                ,
                 columns = GridCells.Fixed(2)
             ) {
                 items(viewModel.resultsCopy) { load ->
