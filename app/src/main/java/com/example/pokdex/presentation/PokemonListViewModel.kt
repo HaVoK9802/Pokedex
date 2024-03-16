@@ -92,12 +92,13 @@ class PokemonViewModel @Inject constructor(val pokemonApiService: PokeApi) : Vie
                         }
                     }
 
-                } else {
+                } else{
 
                     resultsCopy.clear()
                     resultsCopy.addAll(filterByRelevance.sortedBy { it.name })
 
                 }
+
 
 
             }
@@ -124,6 +125,10 @@ class PokemonViewModel @Inject constructor(val pokemonApiService: PokeApi) : Vie
         }
     }
 
+    fun clearSearch(){
+        searchQueryValue = ""
+        liveSearch("")
+    }
 
 
 }

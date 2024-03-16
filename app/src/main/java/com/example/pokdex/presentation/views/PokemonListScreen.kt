@@ -25,6 +25,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -42,8 +43,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
@@ -82,13 +85,17 @@ fun PokemonListScreen(navController: NavController, viewModel: PokemonViewModel)
 
        Box(modifier = Modifier
            .fillMaxWidth()
-           .offset(0.dp, 210.dp)) {
+//           .offset(0.dp, 0.dp)
+       )
+       {
 
             when (viewModel.pokemonListStatus) {
                 is RequestStatus.Loading -> CircularProgressIndicator(modifier = Modifier
                     .fillMaxSize()
                     .padding(100.dp)
-                    .align(Alignment.Center))
+                    .align(Alignment.Center)
+                    .offset(0.dp, 210.dp)
+                )
                 is RequestStatus.Success -> {}
                 is RequestStatus.Error -> Text(text = "Failed to fetch")
             }
@@ -96,6 +103,7 @@ fun PokemonListScreen(navController: NavController, viewModel: PokemonViewModel)
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 10.dp)
+                    .padding(top = 210.dp)
                     .background(Color.White),
                 columns = GridCells.Fixed(2)
             ) {
@@ -119,11 +127,7 @@ fun PokemonListScreen(navController: NavController, viewModel: PokemonViewModel)
 }
 
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun PokemonListScreenPreview() {
-//    PokemonListScreen(navController = rememberNavController(), viewModel = PokemonViewModel())
-}
+
 
 @Composable
 fun Pokeball() {
@@ -136,15 +140,7 @@ fun Pokeball() {
             .background(Color.Transparent)
             .offset(0.dp, 180.dp), contentAlignment = Alignment.Center
     ) {
-//        Column(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(20.dp)
-//                .background(Color.Red)
-//                .align(Alignment.TopCenter)
-//        ) {
-//
-//        }
+
         Spacer(
             modifier = Modifier
                 .height(12.dp)
@@ -190,11 +186,6 @@ fun Pokeball() {
     }
 }
 
-@Preview
-@Composable
-fun PokeballPreview() {
-    Pokeball()
-}
 
 
 @Composable
@@ -213,8 +204,14 @@ fun SearchBar(viewModel: PokemonViewModel) {
             singleLine = true,
             placeholder = { Text(text = "Enter Pokemon...")},
             shape = RoundedCornerShape(8.dp),
-            leadingIcon ={ Icon(imageVector = Icons.Default.Search, contentDescription ="Search icon" )
-            },
+            leadingIcon ={
+                Icon(imageVector = Icons.Default.Search, contentDescription ="Search icon" )
+            }
+            ,
+            trailingIcon = {
+                Icon(imageVector = Icons.Default.Close,contentDescription = "clear search", modifier = Modifier.clickable { viewModel.clearSearch()  })
+            }
+            ,
             colors = TextFieldDefaults.
             colors(unfocusedContainerColor = Color.Black,
                 focusedContainerColor = Color.Black,
@@ -227,11 +224,6 @@ fun SearchBar(viewModel: PokemonViewModel) {
 
 }
 
-@Preview
-@Composable
-fun SearchBarPreview() {
-    SearchBar(viewModel = viewModel())
-}
 
 
 @Composable
@@ -241,21 +233,14 @@ fun PokeCard(viewModel: PokemonViewModel,navController: NavController,name:Strin
             .clip(RoundedCornerShape(10.dp))
             .aspectRatio(0.75f)
             .background(Color(255, 255, 255, 255))
-//            .border(1.dp, color = Color.Red, shape = RoundedCornerShape(10.dp))
-            //43,109,181
-//            .border(
-//                0.dp,
-//                brush = Brush.verticalGradient(listOf(Color(43,109,181),Color(43,109,181),)),
-//                shape = RoundedCornerShape(10.dp)
-//            )
             .clickable {
 
-                if(!viewModel.cardTapped) {
-                    viewModel.cardTapped=true;
+                if (!viewModel.cardTapped) {
+                    viewModel.cardTapped = true;
                     viewModel.revertCardTapped()
                     navController.navigate("pokemon_detail_screen/${name}")
                 }
-                       }
+            }
 
         , contentAlignment = Alignment.Center
     ){
@@ -289,8 +274,24 @@ fun PokeCard(viewModel: PokemonViewModel,navController: NavController,name:Strin
 @Preview
 @Composable
 fun PokeCardPreview(){
-//    PokeCard(viewModel = PokemonViewModel(),navController = rememberNavController(), name = "Pokemon", pokeId = 2)
+//    PokeCard(viewModel = hiltViewModel(),navController = rememberNavController(), name = "Pokemon", pokeId = 2)
+}
+
+@Preview
+@Composable
+fun PokeballPreview() {
+//    Pokeball()
+}
+
+@Preview
+@Composable
+fun SearchBarPreview() {
+    SearchBar(viewModel = viewModel())
 }
 
 
-
+@Preview
+@Composable
+fun PokemonListScreenPreview() {
+//    PokemonListScreen(navController = rememberNavController(), viewModel = PokemonViewModel())
+}
