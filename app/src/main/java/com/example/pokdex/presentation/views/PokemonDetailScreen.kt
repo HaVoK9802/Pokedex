@@ -42,7 +42,8 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.example.pokdex.R
-import com.example.pokdex.utils.RequestStatus
+import com.example.pokdex.data.remote.RequestStatus
+import com.example.pokdex.data.remote.models.Pokemon
 import com.example.pokdex.presentation.PokemonDetailViewModel
 import com.example.pokdex.ui.theme.AtkColor
 import com.example.pokdex.ui.theme.DefColor
@@ -71,11 +72,9 @@ import com.example.pokdex.ui.theme.water
 import kotlin.math.round
 
 @Composable
-fun PokemonDetailScreen(navController: NavController,pokemonDetailViewModel: PokemonDetailViewModel ) {
+fun PokemonDetailScreen(navController: NavController,pokemonDetailViewModel: PokemonDetailViewModel) {
 
 //    TopBar( navController = navController )
-
-
 
         when (pokemonDetailViewModel.pokeDetailStatus) {
             is RequestStatus.Loading -> {
@@ -86,7 +85,7 @@ fun PokemonDetailScreen(navController: NavController,pokemonDetailViewModel: Pok
 
                 )
             }
-            is RequestStatus.Success<com.example.pokdex.data.models.Pokemon> -> {
+            is RequestStatus.Success<Pokemon> -> {
 
                 PokemonStatsContainer(pokemonDetailViewModel,navController)
 
@@ -361,7 +360,7 @@ fun PokedexImageContainer(pokemonDetailViewModel: PokemonDetailViewModel){
                     modifier = Modifier
                         .fillMaxSize()
                         .align(Alignment.TopCenter)
-                        .offset(0.dp, -10.dp)
+                        .offset(0.dp,-10.dp)
                 ) {
                     val state = painter.state
                     if (state is AsyncImagePainter.State.Loading ||
@@ -514,8 +513,7 @@ fun StatBar(pokemonDetailViewModel: PokemonDetailViewModel){
             ){
                 Text(
                     text = statToShortStatMapping(stat.stat.name.lowercase()),
-                    modifier = Modifier
-                        .padding(horizontal = 10.dp)
+                    modifier = Modifier.padding(horizontal = 10.dp)
                         .align(Alignment.CenterStart)
 
                 )

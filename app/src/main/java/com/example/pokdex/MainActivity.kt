@@ -56,7 +56,6 @@ class MainActivity : ComponentActivity() {
 
                         val pokemonDetailViewModel:PokemonDetailViewModel = hiltViewModel()
 
-
                         LaunchedEffect(Unit){
                             pokemonDetailViewModel.fetchPokemonStats(name = pokemonName?:"")
                         }
@@ -68,5 +67,19 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
+//@Preview
+//@Composable
+//fun APIResults(){
+//     Surface(modifier = Modifier.fillMaxSize()){
+//         val viewModel:PokemonViewModel= viewModel()
+//         viewModel.getPokemonList()
+//
+//         when(viewModel.pokemonListStatus){
+//             is RequestStatus.Loading -> Text(text = "loading...")
+//             is RequestStatus.Success ->  Text(text = viewModel.resultsCopy[5].name)
+//             is RequestStatus.Error -> Text(text = "rtt")
+//         }
+//
+//     }
+//}
 

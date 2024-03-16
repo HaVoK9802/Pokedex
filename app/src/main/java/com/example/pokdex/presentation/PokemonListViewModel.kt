@@ -7,11 +7,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pokdex.data.LIMIT
-import com.example.pokdex.data.OFFSET
-import com.example.pokdex.data.models.PokemonList
+import com.example.pokdex.data.remote.LIMIT
+import com.example.pokdex.data.remote.OFFSET
 import com.example.pokdex.data.remote.PokeApi
-import com.example.pokdex.utils.RequestStatus
+import com.example.pokdex.data.remote.RequestStatus
+import com.example.pokdex.data.remote.models.PokemonList
+import com.example.pokdex.data.remote.models.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -25,8 +26,8 @@ import javax.inject.Inject
 class PokemonViewModel @Inject constructor(val pokemonApiService: PokeApi) : ViewModel() {
     var pokemonListStatus: RequestStatus<PokemonList> by mutableStateOf(RequestStatus.Loading())
 
-    private var results: List<com.example.pokdex.data.models.Result> =listOf()
-    var resultsCopy: MutableList<com.example.pokdex.data.models.Result> = mutableStateListOf()
+    private var results: List<Result> =listOf()
+    var resultsCopy: MutableList<Result> = mutableStateListOf()
 
     var searchQueryValue: String by mutableStateOf("")
 
@@ -118,7 +119,7 @@ class PokemonViewModel @Inject constructor(val pokemonApiService: PokeApi) : Vie
 
     fun revertCardTapped(){
         viewModelScope.launch(Dispatchers.Main){
-            delay(500)
+            delay(700)
             cardTapped = false
         }
     }

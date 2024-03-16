@@ -6,10 +6,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokdex.data.remote.PokeApi
-import com.example.pokdex.utils.RequestStatus
-import com.example.pokdex.data.models.Pokemon
-import com.example.pokdex.data.models.Stat
-import com.example.pokdex.data.models.Type
+import com.example.pokdex.data.remote.RequestStatus
+import com.example.pokdex.data.remote.models.Pokemon
+import com.example.pokdex.data.remote.models.Stat
+import com.example.pokdex.data.remote.models.Type
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PokemonDetailViewModel @Inject constructor(val pokemonApiService: PokeApi):ViewModel(){
 
-    var pokeDetailStatus: RequestStatus<Pokemon> by mutableStateOf(RequestStatus.Loading())
+    var pokeDetailStatus:RequestStatus<Pokemon> by mutableStateOf(RequestStatus.Loading())
     var height:Int by mutableStateOf(0)
     var weight:Int by mutableStateOf(0)
     //even if it was not state property, directly mutating this property through the vm instance(who's state is tracked)

@@ -48,8 +48,8 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.example.pokdex.R
-import com.example.pokdex.data.IMAGE_BASE_URL
-import com.example.pokdex.utils.RequestStatus
+import com.example.pokdex.data.remote.IMAGE_BASE_URL
+import com.example.pokdex.data.remote.RequestStatus
 import com.example.pokdex.presentation.PokemonViewModel
 
 
@@ -261,7 +261,7 @@ fun PokeCard(viewModel: PokemonViewModel,navController: NavController,name:Strin
     ){
 
         SubcomposeAsyncImage(
-            model = IMAGE_BASE_URL +pokeId.toString()+".png",
+            model = IMAGE_BASE_URL+pokeId.toString()+".png",
             contentDescription = "cec",
             modifier = Modifier.fillMaxSize()
         ) {
