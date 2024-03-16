@@ -255,8 +255,11 @@ fun SearchBar(viewModel: PokemonViewModel) {
                 unfocusedContainerColor = Color.Black,
                 focusedContainerColor = Color.Black,
                 unfocusedTextColor = Color.LightGray,
-                focusedTextColor = Color.LightGray
+                focusedTextColor = Color.LightGray,
+                unfocusedIndicatorColor = Color.Black,
+                focusedIndicatorColor = Color.DarkGray,
             ),
+
         )
 
 
